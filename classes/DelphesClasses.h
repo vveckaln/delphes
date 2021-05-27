@@ -254,7 +254,14 @@ public:
 
   Float_t E; // photon energy
 
+  Float_t X; //particle arrival time of flight
+  Float_t Y; //particle arrival time of flight
+  Float_t Z; //particle arrival time of flight
   Float_t T; // particle arrival time of flight
+  Float_t XOuter; //particle arrival time of flight
+  Float_t YOuter; //particle arrival time of flight
+  Float_t ZOuter; //particle arrival time of flight
+  Float_t TOuter; //particle arrival time of flight
 
   Float_t EhadOverEem; // ratio of the hadronic versus electromagnetic energy deposited in the calorimeter
 
@@ -286,7 +293,15 @@ public:
   Float_t Eta; // electron pseudorapidity
   Float_t Phi; // electron azimuthal angle
 
+  Float_t X; //particle arrival time of flight
+  Float_t Y; //particle arrival time of flight
+  Float_t Z; //particle arrival time of flight
+
   Float_t T; // particle arrival time of flight
+  Float_t XOuter; //particle arrival time of flight
+  Float_t YOuter; //particle arrival time of flight
+  Float_t ZOuter; //particle arrival time of flight
+  Float_t TOuter; //particle arrival time of flight
 
   Int_t Charge; // electron charge
 
@@ -323,7 +338,15 @@ public:
   Float_t Eta; // muon pseudorapidity
   Float_t Phi; // muon azimuthal angle
 
-  Float_t T; // particle arrival time of flight
+  Float_t X; //particle origin time of flight
+  Float_t Y; //particle origin time of flight
+  Float_t Z; //particle origin time of flight
+  Float_t T; //particle origin time of flight
+  Float_t XOuter; //particle arrival time of flight
+  Float_t YOuter; //particle arrival time of flight
+  Float_t ZOuter; //particle arrival time of flight
+  Float_t TOuter; //particle arrival time of flight
+
 
   Int_t Charge; // muon charge
 
@@ -359,6 +382,10 @@ public:
   Float_t Phi; // jet azimuthal angle
 
   Float_t T; //particle arrival time of flight
+  Float_t XOuter; //particle arrival time of flight
+  Float_t YOuter; //particle arrival time of flight
+  Float_t ZOuter; //particle arrival time of flight
+  Float_t TOuter; //particle arrival time of flight
 
   Float_t Mass; // jet invariant mass
 
@@ -444,14 +471,16 @@ public:
   Float_t PhiOuter; // track azimuthal angle at the tracker edge
 
   Float_t T; // track vertex position (t component)
+  Float_t XOuter; //particle arrival time of flight
+  Float_t YOuter; //particle arrival time of flight
+  Float_t ZOuter; //particle arrival time of flight
+  Float_t TOuter; //particle arrival time of flight
+
+
   Float_t X; // track vertex position (x component)
   Float_t Y; // track vertex position (y component)
   Float_t Z; // track vertex position (z component)
 
-  Float_t TOuter; // track position (t component) at the tracker edge
-  Float_t XOuter; // track position (x component) at the tracker edge
-  Float_t YOuter; // track position (y component) at the tracker edge
-  Float_t ZOuter; // track position (z component) at the tracker edge
 
   Float_t Xd; // X coordinate of point of closest approach to vertex
   Float_t Yd; // Y coordinate of point of closest approach to vertex
@@ -548,6 +577,7 @@ public:
   Float_t PhiOuter; // track azimuthal angle at the tracker edge
 
   Float_t T; // track vertex position (t component)
+
   Float_t X; // track vertex position (x component)
   Float_t Y; // track vertex position (y component)
   Float_t Z; // track vertex position (z component)

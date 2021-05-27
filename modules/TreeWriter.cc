@@ -598,6 +598,7 @@ void TreeWriter::ProcessPhotons(ExRootTreeBranch *branch, TObjArray *array)
     TIter it1(candidate->GetCandidates());
     const TLorentzVector &momentum = candidate->Momentum;
     const TLorentzVector &position = candidate->Position;
+    const TLorentzVector &initialPosition = candidate->InitialPosition;
 
     pt = momentum.Pt();
     cosTheta = TMath::Abs(momentum.CosTheta());
@@ -611,7 +612,14 @@ void TreeWriter::ProcessPhotons(ExRootTreeBranch *branch, TObjArray *array)
     entry->Phi = momentum.Phi();
     entry->PT = pt;
     entry->E = momentum.E();
-    entry->T = position.T() * 1.0E-3 / c_light;
+    entry->X = initialPosition.X();
+    entry->Y = initialPosition.Y();
+    entry->Z = initialPosition.Z();
+    entry->T = initialPosition.T()*1.0E-3/c_light;
+    entry->XOuter = position.X();
+    entry->YOuter = position.Y();
+    entry->ZOuter = position.Z();
+    entry->TOuter = position.T()*1.0E-3/c_light;
 
     // Isolation variables
 
@@ -649,6 +657,7 @@ void TreeWriter::ProcessElectrons(ExRootTreeBranch *branch, TObjArray *array)
   {
     const TLorentzVector &momentum = candidate->Momentum;
     const TLorentzVector &position = candidate->Position;
+    const TLorentzVector &initialPosition = candidate->InitialPosition;
 
     pt = momentum.Pt();
     cosTheta = TMath::Abs(momentum.CosTheta());
@@ -662,7 +671,14 @@ void TreeWriter::ProcessElectrons(ExRootTreeBranch *branch, TObjArray *array)
     entry->Phi = momentum.Phi();
     entry->PT = pt;
 
-    entry->T = position.T() * 1.0E-3 / c_light;
+    entry->X = initialPosition.X();
+    entry->Y = initialPosition.Y();
+    entry->Z = initialPosition.Z();
+    entry->T = initialPosition.T()*1.0E-3/c_light;
+    entry->XOuter = position.X();
+    entry->YOuter = position.Y();
+    entry->ZOuter = position.Z();
+    entry->TOuter = position.T()*1.0E-3/c_light;
 
     // displacement
     entry->D0 = candidate->D0;
@@ -705,7 +721,7 @@ void TreeWriter::ProcessMuons(ExRootTreeBranch *branch, TObjArray *array)
   {
     const TLorentzVector &momentum = candidate->Momentum;
     const TLorentzVector &position = candidate->Position;
-
+    const TLorentzVector &initialPosition = candidate->InitialPosition;
     pt = momentum.Pt();
     cosTheta = TMath::Abs(momentum.CosTheta());
     signPz = (momentum.Pz() >= 0.0) ? 1.0 : -1.0;
@@ -721,8 +737,14 @@ void TreeWriter::ProcessMuons(ExRootTreeBranch *branch, TObjArray *array)
     entry->Phi = momentum.Phi();
     entry->PT = pt;
 
-    entry->T = position.T() * 1.0E-3 / c_light;
-
+    entry->X = initialPosition.X();
+    entry->Y = initialPosition.Y();
+    entry->Z = initialPosition.Z();
+    entry->T = initialPosition.T()*1.0E-3/c_light;
+    entry->XOuter = position.X();
+    entry->YOuter = position.Y();
+    entry->ZOuter = position.Z();
+    entry->TOuter = position.T()*1.0E-3/c_light;
     // displacement
     entry->D0 = candidate->D0;
     entry->ErrorD0 = candidate->ErrorD0;
