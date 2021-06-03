@@ -34,10 +34,18 @@ ExRootTreeWriter::~ExRootTreeWriter()
   set<ExRootTreeBranch *>::iterator itBranches;
   for(itBranches = fBranches.begin(); itBranches != fBranches.end(); ++itBranches)
   {
-    delete(*itBranches);
+    if (*itBranches)
+      {
+	delete *itBranches;
+	//*itBranches = nullptr;
+      }
   }
-
-  if(fTree) delete fTree;
+  fBranches.clear();
+  if (fTree) 
+    {
+      delete fTree;
+      fTree = nullptr;
+    }
 }
 
 //------------------------------------------------------------------------------

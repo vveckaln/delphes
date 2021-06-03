@@ -2,6 +2,9 @@
 *.swp
 *.swo
 *bk
+[^\.]*
+*.root
+.__afs*
 CaloGrid
 ClassesDict_rdict.pcm
 DelphesHepMC

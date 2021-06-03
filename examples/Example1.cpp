@@ -32,6 +32,7 @@
 #include "TLegend.h"
 #include "TLorentzVector.h"
 #include "TPaveText.h"
+#include "TCanvas.h"
 
 #include "classes/DelphesClasses.h"
 

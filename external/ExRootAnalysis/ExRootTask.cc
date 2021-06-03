@@ -300,6 +300,7 @@ TFolder *ExRootTask::NewFolder(const char *name)
 TObject *ExRootTask::GetObject(const char *name, TClass *cl)
 {
   stringstream message;
+  printf("object name %s\n", name);
   TObject *object = GetFolder()->FindObject(name);
   if(object && object->IsA() != cl)
   {

@@ -47,12 +47,18 @@ DelphesFactory::DelphesFactory(const char *name) :
 
 DelphesFactory::~DelphesFactory()
 {
-  if(fObjArrays) delete fObjArrays;
+
+  if (fObjArrays)
+    {
+      delete fObjArrays;
+      fObjArrays = nullptr;
+    }
 
   map<const TClass *, ExRootTreeBranch *>::iterator itBranches;
   for(itBranches = fBranches.begin(); itBranches != fBranches.end(); ++itBranches)
   {
-    delete(itBranches->second);
+    delete itBranches->second;
+    itBranches -> second = nullptr;
   }
 }
 

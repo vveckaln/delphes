@@ -6,7 +6,6 @@ mass.
 root -l examples/Example1.C'("delphes_output.root")'
 */
 
-#include "TCanvas.h"
 
 #ifdef __CLING__
 R__LOAD_LIBRARY(libDelphes)
@@ -16,7 +15,7 @@ R__LOAD_LIBRARY(libDelphes)
 
 //------------------------------------------------------------------------------
 
-void Example1(const char *inputFile)
+void Example1(const char *inputFile, const char * channel)
 {
   //gSystem->Load("libDelphes");
 
@@ -27,7 +26,7 @@ void Example1(const char *inputFile)
   // Create object of class ExRootTreeReader
   ExRootTreeReader *treeReader = new ExRootTreeReader(&chain);
   Long64_t numberOfEntries = treeReader->GetEntries();
-
+  printf("number of entries %u\n", treeReader -> GetEntries());
   // Get pointers to branches used in this analysis
   TClonesArray *branchJet = treeReader->UseBranch("Jet");
   TClonesArray *branchElectron = treeReader->UseBranch("Electron");
@@ -83,17 +82,17 @@ void Example1(const char *inputFile)
     {
       muon = (Muon*) branchMuon -> At(0);
       double tof = (muon -> TOuter - muon -> T)*1E9;
-      printf("muon %.12f, %.12f, %.12f\n", muon -> TOuter * 1E9, muon -> T * 1E9, (muon -> TOuter - muon -> T)*1E9);
+      //      printf("muon %.12f, %.12f, %.12f\n", muon -> TOuter * 1E9, muon -> T * 1E9, (muon -> TOuter - muon -> T)*1E9);
       histTOFmuons -> Fill(tof);
     }
 
     Electron * electron(nullptr);
-    printf("electrons %u\n", branchElectron -> GetEntries());
+    //    printf("electrons %u\n", branchElectron -> GetEntries());
     if (branchElectron -> GetEntries() > 0)
     {
       electron = (Electron*) branchElectron -> At(0);
       double tofelectron = (electron -> TOuter - electron -> T)*1E9;
-      printf("el %.12f, %.12f, %.12f\n", electron -> TOuter * 1E9, electron -> T * 1E9, (electron -> TOuter - electron -> T)*1E9);
+      //      printf("el %.12f, %.12f, %.12f\n", electron -> TOuter * 1E9, electron -> T * 1E9, (electron -> TOuter - electron -> T)*1E9);
       histTOFelectrons -> Fill(tofelectron);
     }
 
@@ -105,11 +104,11 @@ void Example1(const char *inputFile)
   histMass -> Draw();
   TCanvas * cTOFmuons = new TCanvas;
   histTOFmuons -> Draw();
-  cTOFmuons -> SaveAs("histTOFmuons.png");
+  cTOFmuons -> SaveAs((TString("histTOFmuons_") + channel + ".png").Data());
 
   TCanvas * cTOFelectrons = new TCanvas;
   histTOFelectrons -> Draw();
-  cTOFelectrons -> SaveAs("histTOFelectrons.png");
+  cTOFelectrons -> SaveAs((TString("histTOFelectrons_") + channel + ".png").Data());
 
 }
 

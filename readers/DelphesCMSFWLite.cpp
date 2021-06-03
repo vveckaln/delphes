@@ -216,10 +216,8 @@ void ConvertInput(fwlite::Event &event, Long64_t eventCounter,
     {
       // Prevent duplicated particle.
       if(!isMiniAOD) stableParticleOutputArray->Add(candidate);
-      if (pdgCode == 11 || pdgCode == 13) partonOutputArray->Add(candidate);
     }
-    //else if(pdgCode <= 5 || pdgCode == 21 || pdgCode == 15)
-    else if(pdgCode <= 5 || pdgCode == 21 || pdgCode == 11 || pdgCode == 13 || pdgCode == 15)
+    else if(pdgCode <= 5 || pdgCode == 21 || pdgCode == 15)
     {
       partonOutputArray->Add(candidate);
     }
@@ -300,6 +298,7 @@ void SignalHandler(int sig)
 int main(int argc, char *argv[])
 {
   char appName[] = "DelphesCMSFWLite";
+  printf("Starting DelphesCMSFWLite\n");
   stringstream message;
   TFile *inputFile = 0;
   TFile *outputFile = 0;
@@ -311,6 +310,7 @@ int main(int argc, char *argv[])
   DelphesFactory *factory = 0;
   TObjArray *allParticleOutputArray = 0, *stableParticleOutputArray = 0, *partonOutputArray = 0;
   Int_t i;
+  Int_t maxEvents;
   Long64_t eventCounter, numberOfEvents;
   Bool_t firstEvent = kTRUE;
 
@@ -356,6 +356,7 @@ int main(int argc, char *argv[])
     modularDelphes = new Delphes("Delphes");
     modularDelphes->SetConfReader(confReader);
     modularDelphes->SetTreeWriter(treeWriter);
+    maxEvents = confReader->GetInt("::MaxEvents", 0);
 
     factory = modularDelphes->GetFactory();
     allParticleOutputArray = modularDelphes->ExportArray("allParticles");
@@ -389,23 +390,25 @@ int main(int argc, char *argv[])
       eventCounter = 0;
       modularDelphes->Clear();
       treeWriter->Clear();
+      const unsigned char dbcut = 1;
+      for(event.toBegin(); !event.atEnd() && !interrupted && eventCounter < maxEvents/dbcut; ++event)
+	{
+	  ConvertInput(event, eventCounter, branchEvent, branchWeight, factory,
+		       allParticleOutputArray, stableParticleOutputArray, partonOutputArray, firstEvent);
+	  modularDelphes->ProcessTask();
 
-      for(event.toBegin(); !event.atEnd() && !interrupted; ++event)
-      {
-        ConvertInput(event, eventCounter, branchEvent, branchWeight, factory,
-          allParticleOutputArray, stableParticleOutputArray, partonOutputArray, firstEvent);
-        modularDelphes->ProcessTask();
+	  firstEvent = kFALSE;
 
-        firstEvent = kFALSE;
+	  treeWriter->Fill();
 
-        treeWriter->Fill();
+	  modularDelphes->Clear();
+	  treeWriter->Clear();
 
-        modularDelphes->Clear();
-        treeWriter->Clear();
-
-        progressBar.Update(eventCounter, eventCounter);
-        ++eventCounter;
-      }
+	  progressBar.Update(eventCounter, eventCounter);
+	  ++eventCounter;
+	  // printf("********\n");
+	  // getchar();
+	}
 
       progressBar.Update(eventCounter, eventCounter, kTRUE);
       progressBar.Finish();
@@ -416,20 +419,22 @@ int main(int argc, char *argv[])
     modularDelphes->FinishTask();
     treeWriter->Write();
 
-    cout << "** Exiting..." << endl;
 
     delete modularDelphes;
     delete confReader;
     delete treeWriter;
+    outputFile -> Close();
     delete outputFile;
-
+    outputFile = nullptr;
     return 0;
   }
   catch(runtime_error &e)
-  {
-    if(treeWriter) delete treeWriter;
-    if(outputFile) delete outputFile;
-    cerr << "** ERROR: " << e.what() << endl;
-    return 1;
-  }
+    {
+      cerr << "** ERROR: " << e.what() << endl;
+      if(treeWriter) delete treeWriter;
+      if(outputFile) delete outputFile;
+      return 1;
+    }
+  cout << "** Exiting..." << endl;
+
 }

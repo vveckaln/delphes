@@ -53,7 +53,11 @@ ExRootTreeBranch::ExRootTreeBranch(const char *name, TClass *cl, TTree *tree) :
 
 ExRootTreeBranch::~ExRootTreeBranch()
 {
-  if(fData) delete fData;
+  if (fData) 
+    {
+      delete fData;
+      fData = nullptr;
+    }
 }
 
 //------------------------------------------------------------------------------

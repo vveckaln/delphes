@@ -109,6 +109,7 @@ void TreeWriter::Init()
       cout << "** ERROR: cannot find class '" << branchClassName << "'" << endl;
       continue;
     }
+    printf("branchInputArray %s, branchName %s, branchClassName %s branchClass %s\n", branchInputArray.Data(), branchName.Data(), branchClassName.Data(), branchClass -> GetName());
 
     itClassMap = fClassMap.find(branchClass);
     if(itClassMap == fClassMap.end())
@@ -651,6 +652,7 @@ void TreeWriter::ProcessPhotons(ExRootTreeBranch *branch, TObjArray *array)
 
 void TreeWriter::ProcessElectrons(ExRootTreeBranch *branch, TObjArray *array)
 {
+  //  printf("electrons branch %p array %p array -> size() %lu\n", branch, array, array -> GetSize());
   TIter iterator(array);
   Candidate *candidate = 0;
   Electron *entry = 0;
@@ -714,6 +716,7 @@ void TreeWriter::ProcessElectrons(ExRootTreeBranch *branch, TObjArray *array)
 
 void TreeWriter::ProcessMuons(ExRootTreeBranch *branch, TObjArray *array)
 {
+  //printf("muons branch %p array %p array -> size() %lu\n", branch, array, array -> GetSize());
   TIter iterator(array);
   Candidate *candidate = 0;
   Muon *entry = 0;
@@ -749,6 +752,7 @@ void TreeWriter::ProcessMuons(ExRootTreeBranch *branch, TObjArray *array)
     entry->Y = initialPosition.Y();
     entry->Z = initialPosition.Z();
     entry->T = initialPosition.T()*1.0E-3/c_light;
+    //    printf("writing T %f\n", entry -> T);
     entry->XOuter = position.X();
     entry->YOuter = position.Y();
     entry->ZOuter = position.Z();
@@ -1004,13 +1008,13 @@ void TreeWriter::Process()
   ExRootTreeBranch *branch;
   TProcessMethod method;
   TObjArray *array;
-
+  
   for(itBranchMap = fBranchMap.begin(); itBranchMap != fBranchMap.end(); ++itBranchMap)
   {
     branch = itBranchMap->first;
     method = itBranchMap->second.first;
     array = itBranchMap->second.second;
-
+    // printf("processing branch %p array %p\n", branch, array); 
     (this->*method)(branch, array);
   }
 }

@@ -78,11 +78,22 @@ Delphes::~Delphes()
 {
   TFolder *folder = GetFolder();
   if(folder)
-  {
-    folder->Clear();
-    delete folder;
-  }
-  if(fFactory) delete fFactory;
+    {
+      if (gROOT->GetListOfBrowsables() -> FindObject(folder))
+  	{
+  	  gROOT -> GetListOfBrowsables() -> Remove(folder);
+  	}
+
+
+      folder -> Clear();
+      delete folder;
+      folder = nullptr;
+    }
+  if (fFactory) 
+    {
+      //delete fFactory;
+      fFactory = nullptr;
+    }
 }
 
 //------------------------------------------------------------------------------
